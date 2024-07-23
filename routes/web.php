@@ -15,7 +15,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return response()->json([
+        'status' => 'Connected',
+    ]);
 })->name('home');
 
 Route::get('/{short_url}', [UrlsController::class, 'getUrl'])->name('urls.get');
