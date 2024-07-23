@@ -105,7 +105,7 @@ class UrlsController extends Controller
     private function generateShortUrl($length = 5): string
     {
         do {
-            $short_url = Str::random($length);
+            $short_url = Str::uuid()->toString();
         } while (Urls::where('short_url', $short_url)->exists());
 
         return $short_url;
