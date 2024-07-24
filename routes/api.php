@@ -14,5 +14,23 @@ use App\Http\Controllers\UrlsController;
 |
 */
 
-Route::post('/urls', [UrlsController::class, 'store'])->name('urls.store')->middleware('request.guardian');
-Route::get('/{code}/status', [UrlsController::class, 'show'])->name('urls.show');
+Route::post('/token', function () {
+    $credentials = request(['email', 'password']);
+
+    if (!auth()->attempt($credentials)) {
+        return response()->json([
+            'message' => 'Unauthorized'
+        ], 401);
+    }
+
+    $token = auth()->user()->createToken('auth_token');
+
+    return response()->json([
+        'token' => $token->plainTextToken
+    ]);
+})->name('tokens.create');
+
+Route::group(['middleware' => 'auth:sanctum'], function () {
+  Route::post('/urls', [UrlsController::class, 'store'])->name('urls.store')->middleware('request.guardian');
+  Route::get('/{code}/status', [UrlsController::class, 'show'])->name('urls.show');
+});

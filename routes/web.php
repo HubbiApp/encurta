@@ -16,9 +16,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return response()->json([
-        'status' => 'Connected',
+        'status' => 'Connectado',
     ]);
 })->name('home');
+
+Route::get('/login', function () {
+    return response()->json([
+        'status' => 'Connectado',
+        'message' => 'Você precisa estar logado para encurtar uma URL'
+    ]);
+})->name('login');
 
 Route::get('/{short_url}', [UrlsController::class, 'getUrl'])->name('urls.get');
 Route::get('/{code}/status', [UrlsController::class, 'getUrlStatus'])->name('urls.status');
