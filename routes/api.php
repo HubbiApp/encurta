@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TokenController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UrlsController;
 
@@ -14,21 +15,7 @@ use App\Http\Controllers\UrlsController;
 |
 */
 
-Route::post('/token', function () {
-    $credentials = request(['email', 'password']);
-
-    if (!auth()->attempt($credentials)) {
-        return response()->json([
-            'message' => 'Unauthorized'
-        ], 401);
-    }
-
-    $token = auth()->user()->createToken('auth_token');
-
-    return response()->json([
-        'token' => $token->plainTextToken
-    ]);
-})->name('tokens.create');
+Route::post('/token', [TokenController::class, 'store'])->name('token.store');
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
   Route::post('/urls', [UrlsController::class, 'store'])->name('urls.store')->middleware('request.guardian');
